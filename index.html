@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitoramento de NH3</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+            transition: background-color 0.5s ease;
+        }
+        h1 {
+            color: #333;
+        }
+        #valor-ppm {
+            font-size: 24px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Monitoramento de Concentração de NH3</h1>
+    <div id="valor-ppm">Valor de NH3: Aguardando...</div>
+
+    <script>
+        // Função para buscar dados periodicamente
+        function buscarDados() {
+            fetch("https://monitoramentonh3-97nglq6jf-maria-julias-projects-e96a913b.vercel.app/api/sensor")
+                .then(response => response.json())
+                .then(data => {
+                    const ppm = parseFloat(data.ppm);
+                    document.getElementById('valor-ppm').innerText = `Valor de NH3: ${ppm.toFixed(2)} ppm`;
+
+                    // Alteração de cor de fundo
+                    if (ppm > 700) {
+                        document.body.style.backgroundColor = 'red';
+                    } else {
+                        document.body.style.backgroundColor = 'white';
+                    }
+                })
+                .catch(error => console.error('Erro ao buscar dados:', error));
+        }
+
+        // Atualiza os dados a cada 5 segundos
+        setInterval(buscarDados, 5000);
+    </script>
+</body>
+</html>
